@@ -1,0 +1,49 @@
+services:
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    image: elensant/nginx:dev
+    container_name: nginx
+    ports:
+      - "8080:80"
+    networks:
+      - node-nginx-db
+    depends_on:
+      - node  # Nginx depende do Node.js
+  node:
+    build:
+      context: ./node
+    image: elensant/node:dev
+    container_name: node
+    volumes:
+      - ./node:/usr/src/app
+    tty: true
+    ports:
+      - "3000:3000"
+    networks:
+      - node-nginx-db
+    depends_on:
+      - db  # Node.js depende do MySQL
+  db:
+    image: mysql
+    container_name: db
+    environment:
+      MYSQL_DATABASE: nodedb
+      MYSQL_ROOT_PASSWORD: elen   # Define a senha do root
+      MYSQL_USER: elen
+      MYSQL_PASSWORD: elen
+    networks:
+      - node-nginx-db
+    volumes:
+      - ./mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost || exit 1"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 5s
+
+networks:
+  node-nginx-db:
+    driver: bridge
