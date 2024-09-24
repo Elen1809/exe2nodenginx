@@ -10,7 +10,7 @@ services:
     networks:
       - node-nginx-db
     depends_on:
-      - node  # Nginx depende do Node.js
+      - node
   node:
     build:
       context: ./node
@@ -24,13 +24,13 @@ services:
     networks:
       - node-nginx-db
     depends_on:
-      - db  # Node.js depende do MySQL
+      - db 
   db:
     image: mysql
     container_name: db
     environment:
       MYSQL_DATABASE: nodedb
-      MYSQL_ROOT_PASSWORD: elen   # Define a senha do root
+      MYSQL_ROOT_PASSWORD: elen 
       MYSQL_USER: elen
       MYSQL_PASSWORD: elen
     networks:
