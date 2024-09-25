@@ -1,1 +1,2 @@
-Para a inserção dos dados ocorrer acesse: http://localhost:8080/insert
+Repositorio node_modules e a pasta mysql excluidos;
+Para a inserção dos dados no banco ocorrer acesse: http://localhost:8080/insert depois http://localhost:8080/ para visualizar. 
