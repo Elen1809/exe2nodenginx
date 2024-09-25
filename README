@@ -1,1 +1,4 @@
 Para a inserção dos dados no banco ocorrer acesse: http://localhost:8080/insert depois http://localhost:8080/ para visualizar. 
+25/09 18:11 - Ajustes realizados
+  - Remoção start_period
+  - Inclusão da pasta mysql ./mysql:/var/lib/mysql
