@@ -2,7 +2,6 @@ services:
   nginx:
     build:
       context: ./nginx
-      dockerfile: Dockerfile
     image: elensant/nginx:dev
     container_name: nginx
     ports:
@@ -10,7 +9,8 @@ services:
     networks:
       - node-nginx-db
     depends_on:
-      - node
+      db:
+        condition: service_healthy
   node:
     build:
       context: ./node
@@ -20,24 +20,22 @@ services:
       - ./node:/usr/src/app
       - /usr/src/app/node_modules
     tty: true
-    ports:
-      - "3000:3000"
     networks:
       - node-nginx-db
     depends_on:
-      - db 
+      db:
+        condition: service_healthy  
   db:
     image: mysql
     container_name: db
     environment:
       MYSQL_DATABASE: nodedb
       MYSQL_ROOT_PASSWORD: elen 
-      MYSQL_USER: elen
-      MYSQL_PASSWORD: elen
     networks:
       - node-nginx-db
     volumes:
-      - ./mysql:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql 
+
     healthcheck:
       test: ["CMD-SHELL", "mysqladmin ping -h localhost || exit 1"]
       interval: 10s
